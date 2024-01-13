@@ -43,12 +43,11 @@ fetch(geoAPIURL)
 
       // date
       let dateTimestamp = data.list[i].dt;
-      let date = dayjs.unix(dateTimestamp).format("DD MMMM YYYY")
+      let date = dayjs.unix(dateTimestamp).format("DD MMMM YYYY");
       console.log(date);
 
       // icon
       
-
       // temperature
       // **** FIND METRIC *****
       let temperature = data.list[i].main.temp;
@@ -64,7 +63,6 @@ fetch(geoAPIURL)
       console.log(windSpeed);
       }
     })
-
   });
 
 // When a user views the current weather conditions for that city they are presented with:
