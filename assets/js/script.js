@@ -1,4 +1,6 @@
 //  TODO: fix timezom conversion/dates also not displaying ocrrectly
+//  todo: add icons 
+//  todo: search history buttons
 
 // assign global variables
 // my API key
@@ -65,17 +67,17 @@ function fetchWeatherData(cityName) {
             weatherDataArray.push(dailyWeatherData);
           }
           // test weatherDataArray is there
-          console.log(weatherDataArray);
+          // console.log(weatherDataArray);
 
           // CURRENT DATE SECTION
           let currentDateData = weatherDataArray[0];
-          console.log(currentDateData)
+          // console.log(currentDateData)
           // empty existing data
           // $(".jumbotron").empty();
 
           $("#currentCity").text(currentDateData.cityName);
           $("#currentDate").text(currentDateData.date);
-          $(".icon").attr("id", currentDateData.mainWeather);
+          $(".weatherIcon").attr("id", currentDateData.mainWeather);
           $(".current-temp").text(`Temperature: ${currentDateData.temperature} °C (feels like ${currentDateData.feelsLike} °C)`);
           $(".current-wind").text(`Wind speed: ${currentDateData.windSpeed} m/s`);
           $(".current-humidity").text(`Humidity: ${currentDateData.humidity} g.m-3`);
@@ -89,6 +91,7 @@ function fetchWeatherData(cityName) {
             // construct cards
             let cardContent = `
               <p class="card-text">${weatherDataArray[i].date}</p>
+              <img id="${weatherDataArray[i].mainWeather}">
               <ul class="forecastWeather">
                 <li class="temp">Temperature: ${weatherDataArray[i].temperature} °C</li>
                 <li class="wind">Wind speed: ${weatherDataArray[i].windSpeed} m/s</li>
@@ -107,7 +110,6 @@ function fetchWeatherData(cityName) {
 function londonWeather() {
   let cityName = "London";
   fetchWeatherData(cityName);
-    
 }
 londonWeather();
 
@@ -120,7 +122,12 @@ $(".search-button").on("click", function(e) {
 
   // retrieve user search - city
   let cityName = $("#search-input").val();
-  fetchWeatherData(cityName);
+  // run API fetch
+  fetchWeatherData(cityName, function() {
+
+    // clear search bar 
+    $("#search-input").val("");
+  });
   
 });
 
