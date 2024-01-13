@@ -1,7 +1,11 @@
 aside {
-  background-color:  brown;
+  /* background-color:  brown; */
 }
 
 #today {
-  background-color: blueviolet;
+  /* background-color: blueviolet; */
+}
+
+.forecast-header {
+  display: inline;
 }
