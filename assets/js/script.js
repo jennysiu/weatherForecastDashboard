@@ -1,3 +1,5 @@
+//  TODO: fix timezom conversion/dates also not displaying ocrrectly
+
 // assign global variables
 // my API key
 const APIKey = "e8de3fe2e3c9033c7998ce66840fa106";
@@ -68,17 +70,35 @@ function fetchWeatherData(cityName) {
           // CURRENT DATE SECTION
           let currentDateData = weatherDataArray[0];
           console.log(currentDateData)
+          // empty existing data
+          // $(".jumbotron").empty();
+
           $("#currentCity").text(currentDateData.cityName);
           $("#currentDate").text(currentDateData.date);
           $(".icon").attr("id", currentDateData.mainWeather);
-          $(".temp").text(`Temperature: ${currentDateData.temperature} °C (feels like ${currentDateData.feelsLike} °C)`);
-          $(".wind").text(`Wind speed: ${currentDateData.windSpeed} m/s`);
-          $(".humidity").text(`Humidity: ${currentDateData.humidity} g.m-3`);
-          $(".weatherDescription").text(`${currentDateData.weatherDescription}`);
-
+          $(".current-temp").text(`Temperature: ${currentDateData.temperature} °C (feels like ${currentDateData.feelsLike} °C)`);
+          $(".current-wind").text(`Wind speed: ${currentDateData.windSpeed} m/s`);
+          $(".current-humidity").text(`Humidity: ${currentDateData.humidity} g.m-3`);
+          $(".current-weatherDescription").text(`${currentDateData.weatherDescription}`);
           
-
-          return weatherDataArray;
+          // 5 DAY FORECAST
+          // empty existing data
+          $(".card .card-body").empty();
+          for (let i = 1; i < weatherDataArray.length; i++) {
+            let cardSelector = `#weatherCard-${i}`
+            // construct cards
+            let cardContent = `
+              <p class="card-text">${weatherDataArray[i].date}</p>
+              <ul class="forecastWeather">
+                <li class="temp">Temperature: ${weatherDataArray[i].temperature} °C</li>
+                <li class="wind">Wind speed: ${weatherDataArray[i].windSpeed} m/s</li>
+                <li class="humidity">Humidity: ${weatherDataArray[i].humidity}%</li>
+              </ul>
+            `
+            // update card with new content
+            $(cardSelector).find(".card-body").html(cardContent);
+          }          
+          
       });
     });
 }
@@ -88,9 +108,7 @@ function londonWeather() {
   let cityName = "London";
   fetchWeatherData(cityName);
     
-  // console.log(weatherDataArray);
 }
-
 londonWeather();
 
   // retrieve user search - city
@@ -102,7 +120,7 @@ $(".search-button").on("click", function(e) {
 
   // retrieve user search - city
   let cityName = $("#search-input").val();
-  fetchWeatherData();
+  fetchWeatherData(cityName);
   
 });
 
