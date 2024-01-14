@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <header class="container-fluid text-center text-white bg-dark p-2 weather-header">
+  <header class="container-fluid text-center text-white p-2 weather-header">
     <h1>Weather Dashboard</h1>
   </header>
 
@@ -37,13 +37,14 @@
               <input class="form-input weather-search" type="text" id="search-input" placeholder="London"
                 aria-labelledby="form-heading" aria-controls="today forecast" />
                 
-                <!-- Ssubmit button -->
-                <div class="input-group-append">
-                  <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
-                    Search
-                  </button>
-                  <hr class="hr weather-hr" />
-              </div>
+                <!-- Submit button -->
+              
+              <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
+                Search
+              </button>
+
+              <hr class="hr weather-hr" />
+              
             </div>
           </div>
         </form>
@@ -85,7 +86,7 @@
           </div>
           
           <!-- add bootsrap cards -->
-          <div class="row">
+          <div class="row weather-cards">
             <div class="col-lg-2 card" id="weatherCard-1" style="width: 18rem;">
               <!-- <img src="" class="card-img-top" alt="..."> -->
               <div class="card-body">

@@ -1,4 +1,4 @@
-//  TODO: fix timezom conversion/dates also not displaying ocrrectly
+//  TODO: fix timezome conversion/dates also not displaying ocrrectly
 //  todo: add icons 
 //!  todo: search history buttons
 // todo: error handling for city names
@@ -80,7 +80,7 @@ function fetchWeatherData(cityName) {
           // $(".jumbotron").empty();
 
           $("#currentCity").text(currentDateData.cityName);
-          $("#currentDate").text(currentDateData.date);
+          $("#currentDate").text(`${currentDateData.date} (Today)`);
           $(".weatherIcon").attr("id", currentDateData.mainWeather);
           $(".current-temp").text(`Temperature: ${currentDateData.temperature} °C (feels like ${currentDateData.feelsLike} °C)`);
           $(".current-wind").text(`Wind speed: ${currentDateData.windSpeed} m/s`);
@@ -97,8 +97,8 @@ function fetchWeatherData(cityName) {
               <p class="card-text">${weatherDataArray[i].date}</p>
               <img id="${weatherDataArray[i].mainWeather}">
               <ul class="forecastWeather">
-                <li class="temp">Temperature: ${weatherDataArray[i].temperature} °C</li>
-                <li class="wind">Wind speed: ${weatherDataArray[i].windSpeed} m/s</li>
+                <li class="temp">Temp: ${weatherDataArray[i].temperature} °C</li>
+                <li class="wind">Wind: ${weatherDataArray[i].windSpeed} m/s</li>
                 <li class="humidity">Humidity: ${weatherDataArray[i].humidity}%</li>
               </ul>
             `
