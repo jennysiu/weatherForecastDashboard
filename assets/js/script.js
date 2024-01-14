@@ -8,6 +8,8 @@ const APIKey = "e8de3fe2e3c9033c7998ce66840fa106";
 // API compulsory parameter
 let limit = 1;
 
+let recentSearchesArray = [];
+
 // function to fetch weather data 
 function fetchWeatherData(cityName) {
   // retrieve user search - city
@@ -102,6 +104,9 @@ function fetchWeatherData(cityName) {
             $(cardSelector).find(".card-body").html(cardContent);
           }          
           
+          
+
+
       });
     });
 }
@@ -123,15 +128,36 @@ $(".search-button").on("click", function(e) {
   // retrieve user search - city
   let cityName = $("#search-input").val();
   // run API fetch
-  fetchWeatherData(cityName, function() {
+  if (cityName) {
+    fetchWeatherData(cityName)
 
-    // clear search bar 
-    $("#search-input").val("");
-  });
-  
+      // RECENT SEARCHES
+      if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
+        recentSearchesArray.push(cityName);
+        generateRecentSearchButtons();
+        
+      } else if (recentSearchesArray.length >= 5) {
+        // deletes item in add new city to end of array
+        recentSearchesArray.shift();
+        console.log(recentSearchesArray);
+        recentSearchesArray.push(cityName);
+        generateRecentSearchButtons();
+      }
+      // clear search bar 
+      $("#search-input").val("");
+  } 
 });
 
-
+function generateRecentSearchButtons() {
+  $("#history").empty();
+    for (let i = 0; i < recentSearchesArray.length; i ++) {   
+      let recentSearch = $("<button>")
+      .addClass(`search-${i + 1}`)
+      .text(recentSearchesArray[i]);
+      $("#history").append(recentSearch);
+      console.log(recentSearchesArray)
+    }
+}
 
 // console.log(weatherDataArray);
 
