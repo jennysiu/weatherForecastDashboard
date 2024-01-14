@@ -1,6 +1,6 @@
 //  TODO: fix timezom conversion/dates also not displaying ocrrectly
 //  todo: add icons 
-//  todo: search history buttons
+//!  todo: search history buttons
 // todo: error handling for city names
 // ! todo: add search array to local storage
 
@@ -169,8 +169,13 @@ function generateRecentSearchButtons() {
       console.log(storedRecentSearches)
     }
 }
-
 generateRecentSearchButtons()
+
+// event delegation click function to query recent search buttons 
+$("#history").on("click", "button", function(event) {
+  cityName = $(event.target).text();
+  fetchWeatherData(cityName)
+});
 
 // console.log(weatherDataArray);
 
