@@ -1,6 +1,8 @@
 //  TODO: fix timezom conversion/dates also not displaying ocrrectly
 //  todo: add icons 
 //  todo: search history buttons
+// todo: error handling for city names
+// ! todo: add search array to local storage
 
 // assign global variables
 // my API key
@@ -105,8 +107,6 @@ function fetchWeatherData(cityName) {
           }          
           
           
-
-
       });
     });
 }
@@ -134,13 +134,20 @@ $(".search-button").on("click", function(e) {
       // RECENT SEARCHES
       if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
         recentSearchesArray.push(cityName);
+        // save to local storage
+        localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
+
         generateRecentSearchButtons();
+        
         
       } else if (recentSearchesArray.length >= 5) {
         // deletes item in add new city to end of array
         recentSearchesArray.shift();
         console.log(recentSearchesArray);
         recentSearchesArray.push(cityName);
+        // save to local storage
+        localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
+
         generateRecentSearchButtons();
       }
       // clear search bar 
@@ -149,15 +156,21 @@ $(".search-button").on("click", function(e) {
 });
 
 function generateRecentSearchButtons() {
+  // empty existing buttons
   $("#history").empty();
-    for (let i = 0; i < recentSearchesArray.length; i ++) {   
+  // get recent searches array from local storage
+  let storedRecentSearches = JSON.parse(localStorage.getItem("storedRecentSearches"));
+  console.log(storedRecentSearches);
+    for (let i = 0; i < storedRecentSearches.length; i ++) {   
       let recentSearch = $("<button>")
       .addClass(`search-${i + 1}`)
-      .text(recentSearchesArray[i]);
+      .text(storedRecentSearches[i]);
       $("#history").append(recentSearch);
-      console.log(recentSearchesArray)
+      console.log(storedRecentSearches)
     }
 }
+
+generateRecentSearchButtons()
 
 // console.log(weatherDataArray);
 
