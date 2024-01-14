@@ -22,29 +22,25 @@
   <!-- max-width for ultra wide resolutions -->
   <div class="container-fluid" style="max-width: 1400px">
     <div class="row">
-
       <!-- SIDE BAR  -->
       <aside class="col-lg-3 pb-3">
-        <h2 id="form-heading" class="mt-1 h3 form-label">
+        <h3 id="form-heading" class="mt-1 h3 form-label">
           Search for a City:
-        </h2>
+        </h3>
         
         <form id="search-form" class="form">
           <div class="form-inline form-group">
             <div class="input-group">
-
               <!-- city search box -->
               <input class="form-input weather-search" type="text" id="search-input" placeholder="London"
                 aria-labelledby="form-heading" aria-controls="today forecast" />
                 
-                <!-- Submit button -->
-              
+              <!-- Submit button -->
               <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
                 Search
               </button>
 
               <hr class="hr weather-hr" />
-              
             </div>
           </div>
         </form>
@@ -88,63 +84,9 @@
             <h4 class="col-12 forecast-header">5-Day Forecast</h4>
           </div>
           
-          <!-- add bootsrap cards -->
-          <div class="row weather-cards">
-            <div class="col-lg-2 card" id="weatherCard-1" style="width: 18rem;">
-              <!-- <img src="" class="card-img-top" alt="..."> -->
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <ul class="forecastWeather">
-                  <li class="temp"></li>
-                  <li class="wind"></li>
-                  <li class="humidity"></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-lg-2 card" id="weatherCard-2" style="width: 18rem;">
-              <!-- <img src="..." class="card-img-top" alt="..."> -->
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <ul class="forecastWeather">
-                  <li class="temp"></li>
-                  <li class="wind"></li>
-                  <li class="humidity"></li>
-              </div>
-            </div>
-
-            <div class="col-lg-2 card" id="weatherCard-3" style="width: 18rem;">
-              <!-- <img src="..." class="card-img-top" alt="..."> -->
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <ul class="forecastWeather">
-                  <li class="temp"></li>
-                  <li class="wind"></li>
-                  <li class="humidity"></li>
-              </div>
-            </div>
-
-            <div class="col-lg-2 card" id="weatherCard-4" style="width: 18rem;">
-              <!-- <img src="..." class="card-img-top" alt="..."> -->
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <ul class="forecastWeather">
-                  <li class="temp"></li>
-                  <li class="wind"></li>
-                  <li class="humidity"></li>
-              </div>
-            </div>
-
-            <div class="col-lg-2 card" id="weatherCard-5" style="width: 18rem;">
-              <!-- <img src="..." class="card-img-top" alt="..."> -->
-              <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <ul class="forecastWeather">
-                  <li class="temp"></li>
-                  <li class="wind"></li>
-                  <li class="humidity"></li>
-              </div>
-            </div>
+          
+          <div class="row weather-cards"> 
+            <!-- dynamically add bootsrap cards -->
           </div>  
         </section>
       </div>
@@ -153,9 +95,11 @@
 
   <!-- Day.js -->
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-
+  
   <!-- jQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- custom script -->
   <script src="assets/js/script.js"></script>
 </body>
 

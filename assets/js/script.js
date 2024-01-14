@@ -1,5 +1,5 @@
-//  TODO: fix timezome conversion/dates also not displaying ocrrectly
-//  todo: add icons 
+// ! TODO: fix timezome conversion/dates also not displaying correctly
+// ! todo: add icons 
 //!  todo: search history buttons
 // todo: error handling for city names
 // ! todo: add search array to local storage
@@ -12,8 +12,54 @@ let limit = 1;
 
 let recentSearchesArray = [];
 
-// function to fetch weather data 
-function fetchWeatherData(cityName) {
+// function to fetch current weather
+function fetchCurrentWeatherData(cityName) {
+  
+  // Geocoding API - converts city names into coordinates
+  const geoAPIURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
+
+  // GEOCODING API DATA FETCH
+  fetch(geoAPIURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      // geocoding data for city
+      // console.log(data)
+
+      // city latitude
+      let cityLat = data[0].lat;
+      // console.log(cityLat)
+
+      // city longitude
+      let cityLon = data[0].lon;
+      // console.log(cityLon)
+
+
+      // FORECAST WEATHER API DATA FETCH
+      const currentWeatherQueryUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${cityLat}&lon=${cityLon}&appid=${APIKey}&units=metric`
+      
+      fetch(currentWeatherQueryUrl)
+      .then(function (response) {
+        return response.json()
+      })
+      .then(function (data) {
+        console.log(data)
+
+        $("#currentCity").text(data.name);
+        $("#currentDate").text(`${dayjs.unix(data.dt).format("DD MMMM YYYY HH")} (Today)`);
+        $(".weatherIcon").attr("src", `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`);
+        $(".current-temp").text(`Temperature: ${data.main.temp} °C (feels like ${data.main.feels_like} °C)`);
+        
+        $(".current-wind").text(`Wind speed: ${data.wind.speed} m/s`);
+        $(".current-humidity").text(`Humidity: ${data.main.humidity} g.m-3`);
+        $(".current-weatherDescription").text(`${data.weather[0].description}`);
+      });
+    });
+}
+  
+// function to fetch forecast data 
+function fetchForecastData(cityName) {
   // retrieve user search - city
   // let cityName = $("#search-input").val();
   
@@ -37,8 +83,9 @@ function fetchWeatherData(cityName) {
       let cityLon = data[0].lon;
       // console.log(cityLon)
 
-      // WEATHER API DATA FETCH
-      const weatherQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&appid=${APIKey}&units=metric`
+
+      // FORECAST WEATHER API DATA FETCH
+      const weatherQueryUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&appid=${APIKey}&units=metric`
       
       fetch(weatherQueryUrl)
       .then(function (response) {
@@ -46,21 +93,22 @@ function fetchWeatherData(cityName) {
       })
       .then(function (data) {
         console.log(data)
-        // create array of weather data for 6 days (includes current day)
+        // create array of weather data for 5 days 
         let weatherDataArray = [];
 
-          // for loop to iterate for today and 5 days forecast
-          for (let i = 0; i < 6; i++) {
+          // for loop to iterate for today and 5 days forecast 
+          for (let i = 0; i < 40; i++) {
             let dailyWeatherData = {
               // city name
               cityName: data.city.name,
               
               // date (converts timestamp into date format using dayjs)
-              date: dayjs.unix(data.list[i].dt).format("DD MMMM YYYY"),
+              date: dayjs.unix(data.list[i].dt).format("DD MMM YYYY"),
               
               // main weather data
               mainWeather: data.list[i].weather[0].main,
-              temperature: data.list[i].main.temp,
+              maxTemp: data.list[i].main.temp_max,
+              minTemp: data.list[i].main.temp_min,
               feelsLike: data.list[i].main.feels_like,
               humidity: data.list[i].main.humidity,
               windSpeed: data.list[i].wind.speed,
@@ -72,37 +120,58 @@ function fetchWeatherData(cityName) {
             weatherDataArray.push(dailyWeatherData);
           }
 
-          // CURRENT DATE SECTION
-          let currentDateData = weatherDataArray[0];
-
-          $("#currentCity").text(currentDateData.cityName);
-          $("#currentDate").text(`${currentDateData.date} (Today)`);
-          $(".weatherIcon").attr("src", `https://openweathermap.org/img/wn/${currentDateData.weatherIcon}@2x.png`);
-          $(".current-temp").text(`Temperature: ${currentDateData.temperature} °C (feels like ${currentDateData.feelsLike} °C)`);
-          $(".current-wind").text(`Wind speed: ${currentDateData.windSpeed} m/s`);
-          $(".current-humidity").text(`Humidity: ${currentDateData.humidity} g.m-3`);
-          $(".current-weatherDescription").text(`${currentDateData.weatherDescription}`);
-          
-          // 5 DAY FORECAST
-          // empty existing data
+          // empty existing data on weather cards
           $(".card .card-body").empty();
-          for (let i = 1; i < weatherDataArray.length; i++) {
-            let cardSelector = `#weatherCard-${i}`
-            // construct cards
-            let cardContent = `
-              <p class="card-text">${weatherDataArray[i].date}</p>
-              <img src="https://openweathermap.org/img/wn/${weatherDataArray[i].weatherIcon}@2x.png">
-              <ul class="forecastWeather">
-                <li class="temp">Temp: ${weatherDataArray[i].temperature} °C</li>
-                <li class="wind">Wind: ${weatherDataArray[i].windSpeed} m/s</li>
-                <li class="humidity">Humidity: ${weatherDataArray[i].humidity}%</li>
-              </ul>
-            `
-            // update card with new content
-            $(cardSelector).find(".card-body").html(cardContent);
+
+          console.log(weatherDataArray);
+          // loop to dynamically render forecast cards
+          for (let i = 0; i < weatherDataArray.length; i = i + 8) {
+            var card = $("<div></div>")
+            .addClass("col-lg-2 card")
+            .attr({
+              "id": `weatherCard-${i}`, 
+              "style":"width: 18rem;"
+            });
+            var cardBody = $("<div></div>")
+            .addClass("card-body");
+
+            var cardDate = $("<p></p>")
+            .addClass("card-date")
+            .text(`${weatherDataArray[i].date}`);
+
+            var weatherIcon = $("<img></img>")
+            .addClass("weather-icon")
+            .attr("src", `https://openweathermap.org/img/wn/${weatherDataArray[i].weatherIcon}@2x.png`);
+
+            var weatherUlEl = $("<ul></ul>")
+            .addClass("forecastWeather");
+
+            var maxTemp = $("<li></li>")
+            .addClass("maxTemp")
+            .text(`Max temp: ${weatherDataArray[i].maxTemp}°C`);
+
+            var minTemp = $("<li></li>")
+            .addClass("minTemp")
+            .text(`Min temp: ${weatherDataArray[i].minTemp}°C`);
+
+            var wind = $("<li></li>")
+            .addClass("wind")
+            .text(`Wind: ${weatherDataArray[i].windSpeed}m/s`);
+
+            var humidity = $("<li></li>")
+            .addClass("humidity")
+            .text(`Humidity: ${weatherDataArray[i].humidity}g.m-3`);
+        
+            weatherUlEl.append(maxTemp);
+            weatherUlEl.append(minTemp);
+            weatherUlEl.append(wind);
+            weatherUlEl.append(humidity);
+            cardBody.append(cardDate);
+            cardBody.append(weatherIcon);
+            cardBody.append(weatherUlEl);
+            card.append(cardBody);
+            $(".weather-cards").append(card)
           }          
-          
-          
       });
     });
 }
@@ -110,7 +179,9 @@ function fetchWeatherData(cityName) {
 // Front page: London weather
 function londonWeather() {
   let cityName = "London";
-  fetchWeatherData(cityName);
+  fetchCurrentWeatherData(cityName);
+  fetchForecastData(cityName);
+  
 }
 londonWeather();
 
@@ -125,7 +196,8 @@ $(".search-button").on("click", function(e) {
   let cityName = $("#search-input").val();
   // run API fetch
   if (cityName) {
-    fetchWeatherData(cityName)
+    fetchCurrentWeatherData(cityName);
+    fetchForecastData(cityName);
 
       // RECENT SEARCHES
       if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
@@ -156,13 +228,12 @@ function generateRecentSearchButtons() {
   $("#history").empty();
   // get recent searches array from local storage
   let storedRecentSearches = JSON.parse(localStorage.getItem("storedRecentSearches"));
-  console.log(storedRecentSearches);
+  // console.log(storedRecentSearches);
     for (let i = 0; i < storedRecentSearches.length; i ++) {   
       let recentSearch = $("<button>")
       .addClass(`search-${i + 1}`)
       .text(storedRecentSearches[i]);
       $("#history").append(recentSearch);
-      console.log(storedRecentSearches)
     }
 }
 generateRecentSearchButtons()
@@ -170,23 +241,6 @@ generateRecentSearchButtons()
 // event delegation click function to query recent search buttons 
 $("#history").on("click", "button", function(event) {
   cityName = $(event.target).text();
-  fetchWeatherData(cityName)
+  fetchCurrentWeatherData(cityName);
+  fetchForecastData(cityName)
 });
-
-// console.log(weatherDataArray);
-
-// When a user views the current weather conditions for that city they are presented with:
-  // The city name
-  // The date
-  // An icon representation of weather conditions
-  // The temperature
-  // The humidity
-  // The wind speed
-
-// When a user view future weather conditions for that city they are presented with a 5-day forecast that displays:
-  // The date
-  // An icon representation of weather conditions
-  // The temperature
-  // The humidity
-  // When a user click on a city in the search history they are again presented with current and future conditions for that city
-

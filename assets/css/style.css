@@ -15,6 +15,7 @@ header {
 }
 
 /* SIDE BAR */
+
 .input-group {
   display: block;
   margin: 0px;
@@ -26,7 +27,7 @@ header {
 }
 
 .search-button {
-  padding: 1% 2em;
+  padding: 1% 4em;
   margin: 3% 0;
   width: 100%;
   /* border-radius: 5px; */
@@ -55,7 +56,6 @@ hr {
   border-radius: 0;
 }
 
-
 h2 {
   margin: 1.5% ;
   display: flex;
@@ -66,15 +66,11 @@ h2 {
 
 .weatherIcon {
   margin: 0 1% ;
-
-
 }
-
-
 
 /* CURRENT DAY SECTION */
 #today {
-  /* background-color: blueviolet; */
+
 }
 
 .currentWeather {
