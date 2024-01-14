@@ -1,11 +1,92 @@
-aside {
-  /* background-color:  brown; */
+
+:root {
+  --sky-blue: #87CEEB;
+  --white: #FFFFFF;
+  --sun-yellow: #FFD700;
+  --stormy-gray: #a6a3a3;
+  --grass-green: #008000;
+  --sunset-orange: #FFA500;
+  --deep-blue: #00008B;
 }
 
+/* HEADER */
+header {
+  background-color: var(--deep-blue);
+}
+
+/* SIDE BAR */
+.input-group {
+  display: block;
+  margin: 0px;
+  width: 100%;
+}
+
+.weather-search {
+  width: 100%;
+}
+
+.search-button {
+  padding: 1% 2em;
+  margin: 3% 0;
+  width: 100%;
+  /* border-radius: 5px; */
+  background-color: var(--sun-yellow);
+}
+
+hr {
+  margin-bottom: 0;
+}
+
+/* recent searches */
+#history button{
+  margin: 2% 0;
+  padding: 2% 0;
+  border-radius: 3px;
+  border-color: transparent;
+  background-color: var(--stormy-gray);
+  
+}
+
+/* JUMBOTRON */
+.jumbotron {
+  background-color: transparent;
+  border-top: solid 5px var(--sky-blue);
+  border-radius: 0;
+
+}
+
+
+/* CURRENT DAY SECTION */
 #today {
   /* background-color: blueviolet; */
 }
 
+.currentWeather {
+  padding: 0px;
+  list-style-type: none;
+}
+
+/* FORECAST SECTION */
+
+.card {
+  margin: 1%;
+}
+
+.card-body {
+  padding: 0px;
+  padding-top: 2%;
+  margin: 4%;
+  border: 2%;
+}
+
 .forecast-header {
   display: inline;
+} 
+
+.forecastWeather {
+  padding: 0px;
+  list-style-type: none;
 }
+
+
+
