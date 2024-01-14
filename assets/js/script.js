@@ -58,30 +58,26 @@ function fetchWeatherData(cityName) {
               // date (converts timestamp into date format using dayjs)
               date: dayjs.unix(data.list[i].dt).format("DD MMMM YYYY"),
               
-              // main weather 
+              // main weather data
               mainWeather: data.list[i].weather[0].main,
               temperature: data.list[i].main.temp,
               feelsLike: data.list[i].main.feels_like,
               humidity: data.list[i].main.humidity,
               windSpeed: data.list[i].wind.speed,
-              weatherDescription: data.list[i].weather[0].description
+              weatherDescription: data.list[i].weather[0].description,
+              weatherIcon: data.list[i].weather[0].icon
             }
 
             // push daily weather data into weatherDataArray
             weatherDataArray.push(dailyWeatherData);
           }
-          // test weatherDataArray is there
-          // console.log(weatherDataArray);
 
           // CURRENT DATE SECTION
           let currentDateData = weatherDataArray[0];
-          // console.log(currentDateData)
-          // empty existing data
-          // $(".jumbotron").empty();
 
           $("#currentCity").text(currentDateData.cityName);
           $("#currentDate").text(`${currentDateData.date} (Today)`);
-          $(".weatherIcon").attr("id", currentDateData.mainWeather);
+          $(".weatherIcon").attr("src", `https://openweathermap.org/img/wn/${currentDateData.weatherIcon}@2x.png`);
           $(".current-temp").text(`Temperature: ${currentDateData.temperature} °C (feels like ${currentDateData.feelsLike} °C)`);
           $(".current-wind").text(`Wind speed: ${currentDateData.windSpeed} m/s`);
           $(".current-humidity").text(`Humidity: ${currentDateData.humidity} g.m-3`);
@@ -95,7 +91,7 @@ function fetchWeatherData(cityName) {
             // construct cards
             let cardContent = `
               <p class="card-text">${weatherDataArray[i].date}</p>
-              <img id="${weatherDataArray[i].mainWeather}">
+              <img src="https://openweathermap.org/img/wn/${weatherDataArray[i].weatherIcon}@2x.png">
               <ul class="forecastWeather">
                 <li class="temp">Temp: ${weatherDataArray[i].temperature} °C</li>
                 <li class="wind">Wind: ${weatherDataArray[i].windSpeed} m/s</li>
