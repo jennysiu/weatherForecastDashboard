@@ -7,8 +7,8 @@
 const APIKey = "e8de3fe2e3c9033c7998ce66840fa106";
 // API compulsory parameter
 let limit = 1;
-// retrieve any saved recent searches in local storage 
-let recentSearchesArray = JSON.parse(localStorage.getItem("storedRecentSearches"));
+// Stored Recent Searches Key for localStorage
+const storedRecentSearchesKey = "storedRecentSearches";
 
 
 // function to fetch current weather
@@ -55,16 +55,12 @@ function fetchCurrentWeatherData(cityName) {
       });
     })    
     .catch(function(error) {
-      // console.error('There has been a problem with your fetch operation:', error);
-      // Handle the error here
       invalidCityName();
     });
 }
   
 // function to fetch forecast data 
 function fetchForecastData(cityName) {
-  // retrieve user search - city
-  // let cityName = $("#search-input").val();
   
   // Geocoding API - converts city names into coordinates
   const geoAPIURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
@@ -96,6 +92,7 @@ function fetchForecastData(cityName) {
       })
       .then(function (data) {
         // console.log(data)
+        
         // create array of weather data for 5 days 
         let weatherDataArray = [];
 
@@ -213,21 +210,28 @@ $(".search-button").on("click", function(e) {
         $(".error-message").empty();
         fetchCurrentWeatherData(cityName);
         fetchForecastData(cityName);
+        // retrieve any saved recent searches in local storage 
+        let recentSearchesArray = JSON.parse(localStorage.getItem(storedRecentSearchesKey));
+        // console.log(recentSearchesArray);
         
-          // RECENT SEARCHES
-          if (recentSearchesArray && !recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
-            recentSearchesArray.push(cityName);
-            // save to local storage
-            localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
-            generateRecentSearchButtons();
-          } else if (recentSearchesArray && recentSearchesArray.length >= 5) {
-            // deletes item in add new city to end of array
-            recentSearchesArray.shift();
-            recentSearchesArray.push(cityName);
-            // save to local storage
-            localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
-            generateRecentSearchButtons();
-          }
+        if(!recentSearchesArray){
+          recentSearchesArray = [];
+        }
+        
+        // RECENT SEARCHES
+        if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
+          recentSearchesArray.push(cityName);
+          // save to local storage
+          localStorage.setItem(storedRecentSearchesKey, JSON.stringify(recentSearchesArray));
+          generateRecentSearchButtons();
+        } else if (recentSearchesArray.length >= 5) {
+          // deletes item in add new city to end of array
+          recentSearchesArray.shift();
+          recentSearchesArray.push(cityName);
+          // save to local storage
+          localStorage.setItem(storedRecentSearchesKey, JSON.stringify(recentSearchesArray));
+          generateRecentSearchButtons();
+        }
           // clear search bar 
           $("#search-input").val("");
       } else {
@@ -246,7 +250,7 @@ function generateRecentSearchButtons() {
   $(".recent-search-buttons").empty();
 
   // get recent searches array from local storage
-  let storedRecentSearches = JSON.parse(localStorage.getItem("storedRecentSearches"));
+  let storedRecentSearches = JSON.parse(localStorage.getItem(storedRecentSearchesKey));
   
   if (storedRecentSearches) {
     
