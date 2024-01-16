@@ -40,7 +40,7 @@ Provides an option to clear the list of recent searches with a single click.
 
 ## Installation
 
-To use the JavaScript Quiz, no installation is required, you can access the live URL here: https://github.com/jennysiu/weatherForecastDashboard
+No installation is required, you can access the live URL here: https://jennysiu.github.io/weatherForecastDashboard/
 
 To view the code files, you can Git Clone by following the instructions below:
 1. Clone the repository: `git clone [https://github.com/jennysiu/weatherForecastDashboard]`
