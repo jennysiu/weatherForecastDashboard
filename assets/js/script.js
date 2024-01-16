@@ -1,9 +1,15 @@
+// Apologies code is quite WET as noticed quite late that I would need to use
+// multiple fetch calls! and was too late to look into async/await which would have made 
+// it much better
+
 // ASSIGN GLOBAL VARIABLES
 // my API key
 const APIKey = "e8de3fe2e3c9033c7998ce66840fa106";
 // API compulsory parameter
 let limit = 1;
-let recentSearchesArray = [];
+// retrieve any saved recent searches in local storage 
+let recentSearchesArray = JSON.parse(localStorage.getItem("storedRecentSearches"));
+
 
 // function to fetch current weather
 function fetchCurrentWeatherData(cityName) {
@@ -28,7 +34,6 @@ function fetchCurrentWeatherData(cityName) {
       let cityLon = data[0].lon;
       // console.log(cityLon)
 
-
       // FORECAST WEATHER API DATA FETCH
       const currentWeatherQueryUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${cityLat}&lon=${cityLon}&appid=${APIKey}&units=metric`
       
@@ -37,7 +42,7 @@ function fetchCurrentWeatherData(cityName) {
         return response.json()
       })
       .then(function (data) {
-        console.log(data)
+        // console.log(data)
 
         $("#currentCity").text(data.name);
         $("#currentDate").text(`${dayjs.unix(data.dt).format("DD MMMM YYYY HH")} (Today)`);
@@ -90,7 +95,7 @@ function fetchForecastData(cityName) {
         return response.json()
       })
       .then(function (data) {
-        console.log(data)
+        // console.log(data)
         // create array of weather data for 5 days 
         let weatherDataArray = [];
 
@@ -121,7 +126,8 @@ function fetchForecastData(cityName) {
           // empty existing data on weather cards
           $(".weather-cards").empty();
 
-          console.log(weatherDataArray);
+          // console.log(weatherDataArray);
+
           // loop to dynamically render forecast cards
           for (let i = 0; i < weatherDataArray.length; i = i + 8) {
             var card = $("<div></div>")
@@ -172,10 +178,7 @@ function fetchForecastData(cityName) {
       });
     })
     .catch(function(error) {
-      // console.error('There has been a problem with your fetch operation:', error);
-      // Handle the error here
-      // invalidCityName();
-      // validCity = false
+      console.error('There has been a problem with your fetch operation:', error);
     });
 }
 
@@ -204,27 +207,22 @@ $(".search-button").on("click", function(e) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data)
+      // console.log(data)
 
       if (data.length > 0) {
         $(".error-message").empty();
         fetchCurrentWeatherData(cityName);
         fetchForecastData(cityName);
         
-
           // RECENT SEARCHES
-          if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
+          if (recentSearchesArray && !recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
             recentSearchesArray.push(cityName);
             // save to local storage
             localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
-
             generateRecentSearchButtons();
-            
-            
-          } else if (recentSearchesArray.length >= 5) {
+          } else if (recentSearchesArray && recentSearchesArray.length >= 5) {
             // deletes item in add new city to end of array
             recentSearchesArray.shift();
-            console.log(recentSearchesArray);
             recentSearchesArray.push(cityName);
             // save to local storage
             localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
@@ -245,22 +243,26 @@ $(".search-button").on("click", function(e) {
 
 function generateRecentSearchButtons() {
   // empty existing buttons
-  $("#history").empty();
+  $(".recent-search-buttons").empty();
 
   // get recent searches array from local storage
   let storedRecentSearches = JSON.parse(localStorage.getItem("storedRecentSearches"));
+  
+  if (storedRecentSearches) {
+    
   // console.log(storedRecentSearches);
     for (let i = 0; i < storedRecentSearches.length; i ++) {   
       let recentSearch = $("<button>")
       .addClass(`search-${i + 1}`)
       .text(storedRecentSearches[i]);
-      $("#history").append(recentSearch);
+      $(".recent-search-buttons").append(recentSearch);
     }
+  }
 }
 generateRecentSearchButtons()
 
 // event delegation click function to query recent search buttons 
-$("#history").on("click", "button", function(event) {
+$(".recent-search-buttons").on("click", "button", function(event) {
   cityName = $(event.target).text();
   fetchCurrentWeatherData(cityName);
   fetchForecastData(cityName)
@@ -279,3 +281,11 @@ function invalidCityName() {
 
   $(".input-group").append(errorMessage);  
 }
+
+// clear recent searched buttons
+$(".clear-search-button").on("click", function(e) {
+  e.preventDefault();
+  localStorage.clear();
+  $(".recent-search-buttons").empty();
+});
+

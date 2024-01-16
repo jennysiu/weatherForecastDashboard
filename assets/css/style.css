@@ -1,11 +1,10 @@
 :root {
   --sky-blue: #87CEEB;
-  --white: #FFFFFF;
   --sun-yellow: #FFD700;
   --stormy-gray: #a6a3a3;
-  --grass-green: #008000;
-  --sunset-orange: #FFA500;
-  --deep-blue: #00008B;
+  --grass-green: #2e732e;
+  --sunset-orange: #e8b14b;
+  --deep-blue: #2828a2;
 }
 
 /* HEADER */
@@ -14,7 +13,6 @@ header {
 }
 
 /* SIDE BAR */
-
 .input-group {
   display: block;
   margin: 0px;
@@ -30,7 +28,27 @@ header {
   margin: 3% 0;
   width: 100%;
   /* border-radius: 5px; */
-  background-color: var(--sun-yellow);
+  background-color: var(--deep-blue);
+  color: white;
+  /* Transition property: property duration timing-function delay */
+  transition: white 0.5s ease-in-out;
+}
+
+.search-button:hover {
+  /* Target color on hover */
+  background-color: var(--sunset-orange);
+  border-color: var(--sun-yellow)
+}
+
+.clear-search-button {
+  padding: 1%;
+  margin: 3% 0;
+  width: 100%;
+  background-color: var(--stormy-gray);
+}
+
+.clear-search-button:hover {
+  background-color: var(--sunset-orange);
 }
 
 .error-message {
@@ -42,13 +60,18 @@ hr {
 }
 
 /* recent searches */
-#history button{
+.recent-search-buttons button{
+  display: block;
   margin: 2% 0;
   padding: 2% 0;
+  width: 100%;
   border-radius: 3px;
   border-color: transparent;
-  background-color: var(--stormy-gray);
-  
+  background-color: var(--grass-green);
+}
+
+.recent-search-buttons button:hover {
+  background-color: var(--sunset-orange);
 }
 
 /* JUMBOTRON */
@@ -72,10 +95,6 @@ h2 {
 }
 
 /* CURRENT DAY SECTION */
-#today {
-
-}
-
 .currentWeather {
   padding: 0px;
   list-style-type: none;

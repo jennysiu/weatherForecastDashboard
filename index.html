@@ -23,7 +23,7 @@
   <div class="container-fluid" style="max-width: 1400px">
     <div class="row">
       <!-- SIDE BAR  -->
-      <aside class="col-lg-2 col-md-12 col-sm-2 pb-3">
+      <aside class="col-lg-2 col-md-12 col-sm-12 pb-3">
         <h3 id="form-heading" class="mt-1 h3 form-label">
           Search for a City:
         </h3>
@@ -41,6 +41,10 @@
               </button>
 
               <hr class="hr weather-hr" />
+
+              <button type="submit" class="btn clear-search-button" aria-label="submit clear">
+                Clear Recent Searches
+              </button>
             </div>
           </div>
         </form>
@@ -48,7 +52,10 @@
         <!-- cities: history searches -->
         <div class="list-group" id="history">
           <h5>Recent searches</h5>
-          <!-- buttons to be dynamically added -->
+          <section class="recent-search-buttons">
+            <!-- buttons to be dynamically added -->
+          </section>
+          
         </div>
       </aside>
       
