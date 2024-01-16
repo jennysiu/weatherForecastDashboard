@@ -10,12 +10,11 @@ let limit = 1;
 // Stored Recent Searches Key for localStorage
 const storedRecentSearchesKey = "storedRecentSearches";
 
-
 // function to fetch current weather
 function fetchCurrentWeatherData(cityName) {
   
   // Geocoding API - converts city names into coordinates
-  const geoAPIURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
+  const geoAPIURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
 
   // GEOCODING API DATA FETCH
   fetch(geoAPIURL)
@@ -63,7 +62,7 @@ function fetchCurrentWeatherData(cityName) {
 function fetchForecastData(cityName) {
   
   // Geocoding API - converts city names into coordinates
-  const geoAPIURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
+  const geoAPIURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
 
   // GEOCODING API DATA FETCH
   fetch(geoAPIURL)
@@ -84,7 +83,7 @@ function fetchForecastData(cityName) {
 
 
       // FORECAST WEATHER API DATA FETCH
-      const weatherQueryUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&appid=${APIKey}&units=metric`
+      const weatherQueryUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLon}&appid=${APIKey}&units=metric`
       
       fetch(weatherQueryUrl)
       .then(function (response) {
@@ -196,7 +195,7 @@ $(".search-button").on("click", function(e) {
   let cityName = $("#search-input").val();
 
   // Geocoding API - converts city names into coordinates
-  const geoAPIURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
+  const geoAPIURL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
 
   // GEOCODING API DATA FETCH
   fetch(geoAPIURL)
