@@ -1,7 +1,3 @@
-// Apologies code is quite WET as noticed quite late that I would need to use
-// multiple fetch calls! and was too late to look into async/await which would have made 
-// it much better
-
 // ASSIGN GLOBAL VARIABLES
 // my API key
 const APIKey = "e8de3fe2e3c9033c7998ce66840fa106";
