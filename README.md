@@ -43,7 +43,7 @@ Provides an option to clear the list of recent searches with a single click.
 To use the JavaScript Quiz, no installation is required, you can access the live URL here: https://jennysiu.github.io/javaScriptQuizGame/
 
 To view the code files, you can Git Clone by following the instructions below:
-1. Clone the repository: `git clone [https://github.com/jennysiu/weatherForecastDashboard]`
+1. Clone the repository: `git clone [https://jennysiu.github.io/weatherForecastDashboard/]`
 2. Navigate to the project directory: `cd weatherForecastDashboard`
 3. Open the relevant code files. 
 
