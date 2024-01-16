@@ -1,15 +1,8 @@
-// ! TODO: fix timezome conversion/dates also not displaying correctly
-// ! todo: add icons 
-//!  todo: search history buttons
-// todo: error handling for city names
-// ! todo: add search array to local storage
-
-// assign global variables
+// ASSIGN GLOBAL VARIABLES
 // my API key
 const APIKey = "e8de3fe2e3c9033c7998ce66840fa106";
 // API compulsory parameter
 let limit = 1;
-
 let recentSearchesArray = [];
 
 // function to fetch current weather
@@ -55,6 +48,11 @@ function fetchCurrentWeatherData(cityName) {
         $(".current-humidity").text(`Humidity: ${data.main.humidity} g.m-3`);
         $(".current-weatherDescription").text(`${data.weather[0].description}`);
       });
+    })    
+    .catch(function(error) {
+      // console.error('There has been a problem with your fetch operation:', error);
+      // Handle the error here
+      invalidCityName();
     });
 }
   
@@ -121,7 +119,7 @@ function fetchForecastData(cityName) {
           }
 
           // empty existing data on weather cards
-          $(".card .card-body").empty();
+          $(".weather-cards").empty();
 
           console.log(weatherDataArray);
           // loop to dynamically render forecast cards
@@ -130,7 +128,6 @@ function fetchForecastData(cityName) {
             .addClass("col-lg-2 card")
             .attr({
               "id": `weatherCard-${i}`, 
-              "style":"width: 18rem;"
             });
             var cardBody = $("<div></div>")
             .addClass("card-body");
@@ -171,8 +168,14 @@ function fetchForecastData(cityName) {
             cardBody.append(weatherUlEl);
             card.append(cardBody);
             $(".weather-cards").append(card)
-          }          
+          }         
       });
+    })
+    .catch(function(error) {
+      // console.error('There has been a problem with your fetch operation:', error);
+      // Handle the error here
+      // invalidCityName();
+      // validCity = false
     });
 }
 
@@ -181,12 +184,9 @@ function londonWeather() {
   let cityName = "London";
   fetchCurrentWeatherData(cityName);
   fetchForecastData(cityName);
-  
 }
 londonWeather();
 
-  // retrieve user search - city
-  // let cityName = $("#search-input").val();
 
 // user search button 
 $(".search-button").on("click", function(e) {
@@ -194,38 +194,59 @@ $(".search-button").on("click", function(e) {
 
   // retrieve user search - city
   let cityName = $("#search-input").val();
-  // run API fetch
-  if (cityName) {
-    fetchCurrentWeatherData(cityName);
-    fetchForecastData(cityName);
 
-      // RECENT SEARCHES
-      if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
-        recentSearchesArray.push(cityName);
-        // save to local storage
-        localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
+  // Geocoding API - converts city names into coordinates
+  const geoAPIURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName},&limit=${limit}&appid=${APIKey}`
 
-        generateRecentSearchButtons();
+  // GEOCODING API DATA FETCH
+  fetch(geoAPIURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data)
+
+      if (data.length > 0) {
+        $(".error-message").empty();
+        fetchCurrentWeatherData(cityName);
+        fetchForecastData(cityName);
         
-        
-      } else if (recentSearchesArray.length >= 5) {
-        // deletes item in add new city to end of array
-        recentSearchesArray.shift();
-        console.log(recentSearchesArray);
-        recentSearchesArray.push(cityName);
-        // save to local storage
-        localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
 
-        generateRecentSearchButtons();
+          // RECENT SEARCHES
+          if (!recentSearchesArray.includes(cityName) && recentSearchesArray.length < 5) {
+            recentSearchesArray.push(cityName);
+            // save to local storage
+            localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
+
+            generateRecentSearchButtons();
+            
+            
+          } else if (recentSearchesArray.length >= 5) {
+            // deletes item in add new city to end of array
+            recentSearchesArray.shift();
+            console.log(recentSearchesArray);
+            recentSearchesArray.push(cityName);
+            // save to local storage
+            localStorage.setItem("storedRecentSearches", JSON.stringify(recentSearchesArray));
+            generateRecentSearchButtons();
+          }
+          // clear search bar 
+          $("#search-input").val("");
+      } else {
+        invalidCityName()
       }
-      // clear search bar 
-      $("#search-input").val("");
-  } 
+    })
+    .catch(function(error) {
+      console.log('There has been a problem with your fetch operation:', error);
+      // show error message to user
+      invalidCityName();
+    });
 });
 
 function generateRecentSearchButtons() {
   // empty existing buttons
   $("#history").empty();
+
   // get recent searches array from local storage
   let storedRecentSearches = JSON.parse(localStorage.getItem("storedRecentSearches"));
   // console.log(storedRecentSearches);
@@ -244,3 +265,17 @@ $("#history").on("click", "button", function(event) {
   fetchCurrentWeatherData(cityName);
   fetchForecastData(cityName)
 });
+
+function invalidCityName() {
+  // clear search bar
+  $("#search-input").val("");
+
+  // Clear existing
+  $(".error-message").empty();
+  
+  let errorMessage = $("<p>")
+  .addClass("error-message")
+  .text("Please enter a valid city name.");
+
+  $(".input-group").append(errorMessage);  
+}
